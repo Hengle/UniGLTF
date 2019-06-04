@@ -256,7 +256,7 @@ namespace UniGLTF
             return new float[] { c.r, c.g, c.b, c.a };
         }
 
-        public static void ReverseZ(this Transform root)
+        public static void ReverseZRecursive(this Transform root)
         {
             var globalMap = root.Traverse().ToDictionary(x => x, x => PosRot.FromGlobalTransform(x));
 
@@ -298,6 +298,16 @@ namespace UniGLTF
         public static bool Has<T>(this Transform transform, T t) where T : Component
         {
             return transform.GetComponent<T>() == t;
+        }
+
+        public static T GetOrAddComponent<T>(this GameObject go) where T : Component
+        {
+            var c = go.GetComponent<T>();
+            if (c != null)
+            {
+                return c;
+            }
+            return go.AddComponent<T>();
         }
     }
 }
